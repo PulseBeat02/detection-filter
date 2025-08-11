@@ -1,0 +1,7 @@
+option('openmp',           type: 'boolean', value: true,  description: 'Enable OpenMP')
+option('enable_avx2',      type: 'boolean', value: true,  description: 'Define _ENABLE_AVX2')
+option('enable_avx512',    type: 'boolean', value: false, description: 'Define _ENABLE_AVX512')
+option('enable_neon',      type: 'boolean', value: false, description: 'Define _ENABLE_NEON (ARM)')
+option('build_vlc_plugin', type: 'boolean', value: true,  description: 'Build the VLC video filter')
+option('vlc_plugins_dir',  type: 'string',  value: '',    description: 'Install dir for VLC plugins (video_filter). If empty, use a dev folder inside the build dir')
+option('extra_warnings',   type: 'boolean', value: true,  description: 'Enable -Wall -Wextra -Wpedantic')
