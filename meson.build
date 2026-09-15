@@ -70,6 +70,8 @@ if build_plugin
         '-DMODULE_STRING="facedetection"',
         '-DN_(str)=str',
         '-Drestrict=__restrict',
+        # a loadable (not built-in) module: defines vlc_module_name and the plain vlc_entry symbols
+        '-DVLC_DYNAMIC_PLUGIN',
     ]
 
     # VLC only loads plugins named lib<name>_plugin.so, so the target is facedetection_plugin
