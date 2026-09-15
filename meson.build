@@ -64,13 +64,23 @@ if build_plugin
     endif
     plugin_install_dir = plugin_root / 'video_filter'
 
+    # VLC's own tree supplies these through its build system and config.h; a standalone build has to set them.
+    # restrict: VLC 4's public headers use C99 `restrict`, which C++ spells __restrict.
+    plugin_cpp_args = cpp_args + [
+        '-DMODULE_STRING="facedetection"',
+        '-DN_(str)=str',
+        '-Drestrict=__restrict',
+    ]
+
+    # VLC only loads plugins named lib<name>_plugin.so, so the target is facedetection_plugin
+    # with the platform's normal shared-library suffix.
     shared_module(
-        'facedetection',
+        'facedetection_plugin',
         ['facedetection.cpp'],
+        cpp_args: plugin_cpp_args,
         include_directories: inc,
         link_with: face_lib,
         dependencies: vlc_deps + common_deps,
-        name_suffix: 'plugin',
         install: true,
         install_dir: plugin_install_dir
     )
