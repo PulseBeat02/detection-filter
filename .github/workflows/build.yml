@@ -105,7 +105,17 @@ jobs:
             -Dscreen=disabled -Dswscale=disabled
           meson compile -C build
           meson install -C build
-          echo "PKG_CONFIG_PATH=$(dirname "$(find "$PREFIX" -name vlc-plugin.pc | head -n 1)")" >> "$GITHUB_ENV"
+          PKG_DIR="$PREFIX/lib/pkgconfig"
+          mkdir -p "$PKG_DIR"
+          {
+            grep -E '^(prefix=|includedir=|libdir=|Version:)' "$(find "$PREFIX" -name libvlc.pc | head -n 1)"
+            echo 'Name: VLC plugin API'
+            echo 'Description: VLC media player plugin interface'
+            echo 'Cflags: -I${includedir} -I${includedir}/vlc/plugins -D_FILE_OFFSET_BITS=64'
+            echo 'Libs: -L${libdir} -lvlccore'
+          } > "$PKG_DIR/vlc-plugin.pc"
+          cat "$PKG_DIR/vlc-plugin.pc"
+          echo "PKG_CONFIG_PATH=$PKG_DIR" >> "$GITHUB_ENV"
 
       - name: Configure
         run: meson setup build -Dbuildtype=release -Dbuild_vlc_plugin=true -Dopenmp=true ${{ matrix.simd }}
