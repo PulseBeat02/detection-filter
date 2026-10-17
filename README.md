@@ -1,3 +1,5 @@
+[![Build](https://github.com/PulseBeat02/detection-filter/actions/workflows/build.yml/badge.svg)](https://github.com/PulseBeat02/detection-filter/actions)
+
 # Face Detection VLC Filter
 
 This project uses C++ to build a face detection video filter plugin for **VLC 4.X** API. It builds two files, 
