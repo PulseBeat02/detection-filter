@@ -33,7 +33,7 @@ jobs:
             os: windows-2025
             shell: msys2 {0}
             msystem: UCRT64
-            openmp: ''
+            openmp: libgomp:p
             simd: -Denable_avx2=true
           - name: windows-arm64
             os: windows-11-arm
