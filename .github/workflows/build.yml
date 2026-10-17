@@ -33,11 +33,13 @@ jobs:
             os: windows-2025
             shell: msys2 {0}
             msystem: UCRT64
+            openmp: ''
             simd: -Denable_avx2=true
           - name: windows-arm64
             os: windows-11-arm
             shell: msys2 {0}
             msystem: CLANGARM64
+            openmp: llvm-openmp:p
             simd: -Denable_avx2=false -Denable_neon=true
           - name: macos-x64
             os: macos-15-intel
@@ -61,12 +63,15 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y meson ninja-build pkg-config
+          sudo apt-get install -y ninja-build pkg-config bison flex pipx
+          pipx install meson
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Install macOS deps
         if: runner.os == 'macOS'
         run: |
-          brew install meson ninja pkg-config libomp
+          brew install meson ninja pkg-config libomp bison
+          echo "$(brew --prefix bison)/bin" >> "$GITHUB_PATH"
           LIBOMP=$(brew --prefix libomp)
           echo "CPPFLAGS=-I$LIBOMP/include" >> "$GITHUB_ENV"
           echo "LDFLAGS=-L$LIBOMP/lib" >> "$GITHUB_ENV"
@@ -77,12 +82,13 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           update: true
+          install: bison flex curl
           pacboy: >-
             cc:p
             meson:p
             ninja:p
             pkgconf:p
-            openmp:p
+            ${{ matrix.openmp }}
 
       - name: Build VLC 4 core
         run: |
